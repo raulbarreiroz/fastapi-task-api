@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: fastapi-task-api
+    ports:
+      - 8000:8000
+    environment:
+      - APP_ENV=development
+    # Mount the current directory to the container
+    volumes:
+      - ./app:/app/app
+  # Just for development, can be rewritted with no hot reload using:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
