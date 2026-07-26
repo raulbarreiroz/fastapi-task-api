@@ -1,0 +1,84 @@
+# ------------------------------------------------------------------
+# PROJECT CONTEXT (Contexto del Proyecto)
+# ------------------------------------------------------------------
+PROJECT_NAME: FastAPI Task Manager
+DESCRIPTION: Backend API to replace LocalStorage frontend. 
+CURRENT_PHASE: Level 1.5 (Dockerized) - Moving to Level 2 (PostgreSQL).
+LANGUAGE: 
+  - AI_RESPONSE: Spanish (Responde en español, con tono de profesor/entrevistador).
+  - CODE_AND_COMMENTS: English (Escribe todo el código, docstrings y comentarios en INGLÉS).
+  - COMMIT_MESSAGES: English (Conventional Commits).
+
+# ------------------------------------------------------------------
+# TECHNICAL STACK (Stack Tecnológico)
+# ------------------------------------------------------------------
+PYTHON_VERSION: 3.11+
+FRAMEWORK: FastAPI 0.115+
+VALIDATION: Pydantic v2 (usa `model_validator`, `Field`, evita `@validator` antiguo).
+DATABASE: SQLAlchemy 2.0 (Async) + asyncpg (para Nivel 2 y 3).
+TESTING: pytest + httpx.AsyncClient + pytest-asyncio. 
+DEPLOYMENT: Docker + docker-compose + Render.com.
+CI/CD: GitHub Actions (Workflows en .github/workflows/).
+
+# ------------------------------------------------------------------
+# CODING RULES (Reglas de Oro al escribir código)
+# ------------------------------------------------------------------
+1. ASYNC FIRST: Todas las rutas, operaciones de DB y llamadas externas DEBEN ser `async def`. 
+   No uses `def` para endpoints a menos que sea estrictamente síncrono (ej: `/health` simple).
+
+2. TYPE HINTS OBLIGATORIOS: Todas las funciones y métodos deben tener anotaciones de tipo.
+   Usa `from typing import Optional, List, Dict` (o `list`, `dict` en Python 3.9+).
+   Ejemplo: `async def get_task(task_id: str, user_id: str = Depends(...)) -> TaskResponse:`
+
+3. DEPENDENCY INJECTION: Usa `Depends()` para autenticación, sesiones de DB y configuraciones.
+   NO importes variables globales directamente dentro de los routers si se pueden inyectar.
+
+4. ERROR HANDLING: Usa `HTTPException` con códigos estándar (404, 401, 403, 422). 
+   Si agregas un nuevo error, asegúrate de que el `validation_exception_handler` en `main.py` lo capture y devuelva el formato `{"detail": "...", "errors": [...]}`.
+
+5. SCHEMAS (Pydantic): 
+   - Input: `TaskCreate`, `TaskUpdate`.
+   - Output: `TaskResponse`.
+   - Mantén la lógica de negocio FUERA de los schemas (solo validación de datos). 
+     La regla de "URGENTE" va en el Router, no en el Schema.
+
+6. TESTING RULES (Modo QA Estricto):
+   - Estructura AAA (Arrange-Act-Assert) con comentarios `# ARRANGE`, `# ACT`, `# ASSERT`.
+   - Aísla la base de datos en cada test (usar fixture que limpie la DB).
+   - Cobertura mínima exigida: > 90%. Usa `pytest --cov=app --cov-report=term`.
+   - Marca los tests con `@pytest.mark.unit` o `@pytest.mark.integration`.
+
+7. CONFIGURACIÓN: Usa `pydantic-settings` para manejar variables de entorno. 
+   NO hardcodees puertos, tokens o rutas. Todo debe salir de `app.config.settings`.
+
+# ------------------------------------------------------------------
+# GIT & DEVOPS RULES (Flujo de trabajo)
+# ------------------------------------------------------------------
+1. COMMITS: Usa Conventional Commits en INGLÉS.
+   Tipos permitidos: `feat`, `fix`, `chore`, `docs`, `test`, `ci`, `refactor`.
+   Ejemplo: `feat(db): add async SQLAlchemy session dependency`.
+
+2. RAMAS: `main` (producción), `develop` (integración), `feature/*` (nuevas características).
+   - Nunca hagas push directo a `develop` o `main`. Siempre via Pull Request.
+
+3. CI/CD: Si añades una nueva dependencia, actualiza `requirements.txt` y asegúrate de que el 
+   GitHub Actions workflow (`ci.yml`) la instale correctamente.
+
+# ------------------------------------------------------------------
+# CURSOR BEHAVIOR (Comportamiento de la IA)
+# ------------------------------------------------------------------
+1. CONCISION: Da respuestas directas y con código listo para copiar. No des explicaciones largas 
+   a menos que el usuario pregunte explícitamente "explícame" o "por qué".
+2. BUGS: Cuando el usuario pegue un error, prioriza dar la solución concreta y el código 
+   corregido en lugar de teoría extensa.
+3. REFACTOR: Si el usuario pide mejorar algo, sugiere la versión mejorada y explica el cambio 
+   en 1 o 2 líneas.
+4. CONTEXT: Siempre asume que el usuario está en la raíz del proyecto `fastapi-task-api` y 
+   usando Docker para ejecutar el entorno.
+
+# ------------------------------------------------------------------
+# NEXT STEPS (Contexto futuro)
+# ------------------------------------------------------------------
+- Nivel 2: Integrar PostgreSQL con SQLAlchemy async. 
+  Recuerda que en `docker-compose.yml` se añadirá el servicio `db`.
+- Nivel 3: Añadir Redis para caché y BackgroundTasks para emails.

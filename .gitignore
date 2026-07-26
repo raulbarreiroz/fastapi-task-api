@@ -1,0 +1,36 @@
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Test & coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+cov-report/
+coverage.xml
+
+# Environment variables / secrets (you'll need this in Level 2)
+.env
+.env.*
+
+# IDE / editor
+.vscode/
+.idea/
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Cursor skills lock (local tooling)
+skills-lock.json
