@@ -31,3 +31,6 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+
+# Cursor skills lock (local tooling)
+skills-lock.json

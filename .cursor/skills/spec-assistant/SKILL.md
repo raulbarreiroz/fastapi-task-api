@@ -1,0 +1,1 @@
+C:/Users/MSI PRO/.sk-get/library/harshilparmar/ai-coding-standards/skills/spec-assistant/SKILL.md
