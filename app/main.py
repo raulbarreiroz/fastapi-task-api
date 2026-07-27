@@ -2,9 +2,11 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.status import HTTP_422_UNPROCESSABLE_CONTENT 
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.routers import tasks
 from app.config import settings
+from app.middleware.logging import LoggingMiddleware
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -12,7 +14,25 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# metrics
+instrumentator = Instrumentator(
+    should_group_status_codes=True,
+    should_ignore_untemplated=True,
+    should_respect_env_var=True,  # gated by ENABLE_METRICS (see app.config)
+    should_instrument_requests_inprogress=True,
+    excluded_handlers=[f"{settings.API_V1_PREFIX}/health/", f"{settings.API_V1_PREFIX}/metrics/"],
+)
+instrumentator.instrument(app).expose(
+    app,
+    endpoint=f"{settings.API_V1_PREFIX}/metrics/",
+    tags=["Monitoring"],
+)
+
+# include routers
 app.include_router(tasks.router, prefix=settings.API_V1_PREFIX)
+
+# Add logging middleware
+app.add_middleware(LoggingMiddleware)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
