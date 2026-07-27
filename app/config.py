@@ -9,6 +9,6 @@ class Settings(BaseSettings):
 
     # Server Setting
     HOST: str = "0.0.0.0"
-    PORT: int = 6666
+    PORT: int = 8000
 
 settings = Settings()

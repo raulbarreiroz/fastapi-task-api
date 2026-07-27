@@ -360,7 +360,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "0.0.0.0:6666/api/v1"
+      "value": "0.0.0.0:8000/api/v1"
     }
   ]
 }

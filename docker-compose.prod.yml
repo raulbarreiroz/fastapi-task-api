@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: fastapi-task-api-prod
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      - APP_ENV=production
+      - PORT=${PORT:-8000}
+      - WORKERS=${WORKERS:-4}
+    restart: unless-stopped
+    # No volumes mounted (code is baked into the image)
+    # No command override – uses the default Gunicorn CMD from Dockerfile
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-8000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
