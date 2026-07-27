@@ -10,6 +10,7 @@ services:
       - APP_ENV=production
       - PORT=${PORT:-8000}
       - WORKERS=${WORKERS:-4}
+      - ENABLE_METRICS=${ENABLE_METRICS:-true}
     restart: unless-stopped
     # No volumes mounted (code is baked into the image)
     # No command override – uses the default Gunicorn CMD from Dockerfile

@@ -10,6 +10,7 @@ services:
       - APP_ENV=development
       - PORT=${PORT:-8000}
       - WORKERS=${WORKERS:-2}   # Fewer workers for dev to save resources
+      - ENABLE_METRICS=${ENABLE_METRICS:-true}
     # Mount local code for hot-reloading
     volumes:
       - ./app:/app/app
