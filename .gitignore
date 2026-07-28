@@ -15,6 +15,10 @@ htmlcov/
 cov-report/
 coverage.xml
 
+# k6 / load-test generated outputs
+tests/results*
+tests/summary*
+
 # Environment variables / secrets (you'll need this in Level 2)
 .env
 .env.*
@@ -34,3 +38,6 @@ dist/
 
 # Cursor skills lock (local tooling)
 skills-lock.json
+
+# Local study / interview prep (not for the repo)
+.study/
