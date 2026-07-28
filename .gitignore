@@ -34,3 +34,6 @@ dist/
 
 # Cursor skills lock (local tooling)
 skills-lock.json
+
+# Local study / interview prep (not for the repo)
+.study/
